@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}Start Ride{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8 col-md-10">
+    <div class="card shadow-lg">
+      <div class="card-header bg-success text-white">
+        <h4 class="mb-0">
+          <i class="fas fa-play-circle me-2"></i>Start Your Ride
+        </h4>
+      </div>
+      <div class="card-body">
+        <!-- Scooter Image and Details -->
+        <div class="row mb-4">
+          <div class="col-md-6">
+            <div class="text-center">
+              {% if scooter.image %}
+                <img src="{{ scooter.image.url }}" class="img-fluid rounded shadow" alt="{{ scooter.name }}" style="max-height: 300px; width: 100%; object-fit: cover;">
+              {% else %}
+                <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
+                  <i class="fas fa-motorcycle fa-5x text-muted"></i>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="h-100 d-flex flex-column justify-content-center">
+              <h3 class="text-primary mb-3">{{ scooter.name }}</h3>
+              <div class="mb-3">
+                <span class="badge bg-secondary fs-6 me-2">ID: {{ scooter.identifier }}</span>
+                <span class="badge bg-success fs-6">Available</span>
+              </div>
+              
+              <!-- Battery Level -->
+              <div class="mb-3">
+                <div class="d-flex align-items-center mb-2">
+                  <i class="fas fa-battery-three-quarters me-2 text-success"></i>
+                  <span class="fw-bold">Battery Level: {{ scooter.battery_level }}%</span>
+                </div>
+                <div class="progress" style="height: 12px;">
+                  <div class="progress-bar 
+                    {% if scooter.battery_level > 50 %}bg-success
+                    {% elif scooter.battery_level > 20 %}bg-warning
+                    {% else %}bg-danger{% endif %}" 
+                    role="progressbar" 
+                    style="width: {{ scooter.battery_level }}%"
+                    aria-valuenow="{{ scooter.battery_level }}" 
+                    aria-valuemin="0" 
+                    aria-valuemax="100">
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Ride Information -->
+              <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Ride Rate:</strong> ₹30 per minute<br>
+                <small class="text-muted">Cost will be calculated automatically when you end your ride.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Confirmation Form -->
+        <div class="border-top pt-4">
+          <h5 class="mb-3">
+            <i class="fas fa-question-circle me-2 text-warning"></i>
+            Ready to start your ride?
+          </h5>
+          <p class="text-muted mb-4">
+            By clicking "Start Ride", you agree to the terms and conditions. 
+            Your ride will begin immediately and you'll be charged ₹30 per minute.
+          </p>
+          
+          <form method="post">
+            {% csrf_token %}
+            <div class="d-flex gap-3">
+              <button type="submit" class="btn btn-success btn-lg">
+                <i class="fas fa-play me-2"></i>Start Ride Now
+              </button>
+              <a href="{% url 'scooter_list' %}" class="btn btn-outline-secondary btn-lg">
+                <i class="fas fa-arrow-left me-2"></i>Back to Scooters
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add some custom styling -->
+<style>
+  .card {
+    border: none;
+    border-radius: 15px;
+  }
+  .card-header {
+    border-radius: 15px 15px 0 0 !important;
+  }
+  .btn-lg {
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-weight: 600;
+  }
+  .progress {
+    border-radius: 10px;
+  }
+  .alert {
+    border-radius: 10px;
+    border: none;
+  }
+</style>
+{% endblock %}

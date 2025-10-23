@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Ride History{% endblock %}
+{% block content %}
+<h2>Your Ride History</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Scooter</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Duration (minutes)</th>
+      <th>Cost</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for ride in rides %}
+    <tr>
+      <td>{{ ride.scooter.identifier }}</td>
+      <td>{{ ride.start_time }}</td>
+      <td>{{ ride.end_time|default:"In Progress" }}</td>
+      <td>
+        {% if ride.end_time %}
+          {{ ride.duration|floatformat:1 }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+      <td>
+        {% if ride.cost %}
+          {{ ride.cost }}
+        {% else %}
+          -
+        {% endif %}
+      </td>
+      <td>
+        {% if not ride.end_time %}
+          <a href="{% url 'end_ride' ride.id %}" class="btn btn-danger btn-sm">End Ride</a>
+        {% else %}
+          -
+        {% endif %}
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">You have no rides.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
